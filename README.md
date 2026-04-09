@@ -19,3 +19,6 @@ External Command & Control: Many stagers of this type are designed to reach out 
 
 To kill this shit:-
 Just do a full reinstall of Windows, this would be the most secure way.
+
+To prevent this shit:-
+<img width="650" height="364" alt="image" src="https://github.com/user-attachments/assets/a809cc8a-1f3f-4a04-aaf6-85fd444799de" />
