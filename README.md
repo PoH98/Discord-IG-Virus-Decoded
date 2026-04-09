@@ -17,8 +17,8 @@ Credential Theft: Injected code in explorer.exe can monitor keystrokes or access
 Persistence: It may attempt to write itself to other common startup locations or system processes to ensure it survives a reboot even if the original Python files are removed.
 External Command & Control: Many stagers of this type are designed to reach out to a remote server to download additional malware, which could potentially spread across your local network.
 
-To kill this shit:-
+### To kill this shit:-
 Just do a full reinstall of Windows, this would be the most secure way.
 
-To prevent this shit:-
+### To prevent this shit:-
 <img width="650" height="364" alt="image" src="https://github.com/user-attachments/assets/a809cc8a-1f3f-4a04-aaf6-85fd444799de" />
